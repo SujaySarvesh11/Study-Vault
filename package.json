@@ -1,0 +1,43 @@
+{
+  "name": "studyvault",
+  "version": "2.0.0",
+  "private": true,
+  "description": "A private, self-hosted study notebook with an AI assistant that answers only from your notes.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "node scripts/build-client.ts",
+    "start": "node --env-file-if-exists=.env src/server/main.ts",
+    "dev": "node scripts/dev.ts",
+    "manage": "node --env-file-if-exists=.env src/server/manage.ts",
+    "typecheck": "tsc -p . && tsc -p src/client",
+    "test": "npm run build && node --test --test-concurrency=1 \"tests/*.test.ts\"",
+    "import-tutorials": "node --env-file-if-exists=.env src/server/manage.ts import-tutorials"
+  },
+  "dependencies": {
+    "@node-rs/argon2": "^2.2.2",
+    "express": "^5.3.0",
+    "jszip": "^3.10.2",
+    "mammoth": "^1.13.0",
+    "multer": "^2.4.0",
+    "turndown": "^7.2.4",
+    "turndown-plugin-gfm": "^1.0.2",
+    "unpdf": "^1.8.1",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/multer": "^2.3.0",
+    "@types/node": "^24.19.2",
+    "@types/turndown": "^5.0.6",
+    "dompurify": "^3.4.17",
+    "esbuild": "^0.28.2",
+    "highlight.js": "^11.12.0",
+    "marked": "^18.1.1",
+    "typescript": "^7.0.2"
+  }
+}

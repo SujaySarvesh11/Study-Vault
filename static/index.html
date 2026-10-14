@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>StudyVault</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/build/hl-light.css" id="hl-light">
+  <link rel="stylesheet" href="/static/build/hl-dark.css" id="hl-dark" media="(prefers-color-scheme: dark)">
+</head>
+<body>
+  <header class="topbar">
+    <button class="btn icon-btn ghost menu-toggle" id="menuBtn" aria-label="Menu">☰</button>
+    <a class="brand" href="#/">Study<span>Vault</span></a>
+    <form class="search" id="searchForm" role="search">
+      <input id="searchInput" type="search" placeholder="Search your notes…" autocomplete="off" aria-label="Search">
+    </form>
+    <button class="btn icon-btn ghost" id="themeBtn" aria-label="Toggle theme" title="Toggle theme">☾</button>
+    <a class="btn ghost hide-sm" href="#/settings" id="settingsLink">⚙</a>
+    <button class="btn ghost hide-sm" id="logoutBtn">Sign out</button>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="side-actions owner-only">
+        <a class="btn primary" href="#/new">＋ New page</a>
+        <a class="btn" href="#/upload">⇪ Upload</a>
+      </div>
+      <nav class="nav" id="nav"></nav>
+      <div class="side-actions side-bottom">
+        <a class="btn ghost" href="#/settings">⚙ Settings</a>
+        <button class="btn ghost" id="logoutBtn2">Sign out</button>
+      </div>
+    </aside>
+    <main id="main" tabindex="-1"></main>
+    <aside class="toc" id="toc"></aside>
+  </div>
+
+  <button class="btn primary chat-fab" id="chatFab">✦ Ask my notes</button>
+  <section class="chat hidden" id="chat" aria-label="Notes assistant">
+    <div class="chat-head">
+      <div class="grow"><b>Notes assistant</b><small>Answers only from pages in this site</small></div>
+      <button class="btn ghost" id="chatClear" title="New conversation">↺</button>
+      <button class="btn ghost icon-btn" id="chatClose" aria-label="Close">✕</button>
+    </div>
+    <div class="chat-log" id="chatLog"></div>
+    <form class="chat-form" id="chatForm">
+      <textarea id="chatInput" placeholder="Ask about something you've studied…" required maxlength="2000"></textarea>
+      <button class="btn primary" type="submit">Ask</button>
+    </form>
+  </section>
+
+  <script src="/static/build/app.js"></script>
+</body>
+</html>

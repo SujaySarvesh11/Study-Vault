@@ -1,0 +1,25 @@
+# systemd service: keeps StudyVault running on a Linux server and starts it at boot.
+# deploy/setup-ubuntu.sh fills in __USER__ and __APP_DIR__ and installs this file.
+[Unit]
+Description=StudyVault study notebook
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=__USER__
+WorkingDirectory=__APP_DIR__
+ExecStart=/usr/bin/node --env-file-if-exists=.env src/server/main.ts
+Restart=on-failure
+RestartSec=5
+Environment=NODE_ENV=production
+
+# Hardening: the app can only write to its data folder.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=__APP_DIR__/data
+
+[Install]
+WantedBy=multi-user.target

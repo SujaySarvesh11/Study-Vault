@@ -1,0 +1,19 @@
+{
+  // Server, scripts and tests. Node runs these .ts files directly ("type stripping"),
+  // so tsc is only used to CHECK types (npm run typecheck), never to compile.
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "lib": ["esnext"],
+    "types": ["node"],
+    "strict": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true, // imports say "./db.ts", exactly what Node loads
+    "erasableSyntaxOnly": true,         // only syntax Node can strip (no enums, namespaces...)
+    "verbatimModuleSyntax": true,       // type-only imports must say `import type`
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/server", "src/shared", "scripts", "tests"]
+}

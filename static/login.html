@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Sign in · StudyVault</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="login-wrap">
+    <form class="login" id="loginForm">
+      <h1>Study<span>Vault</span></h1>
+      <p>Your private notebook. Sign in to continue.</p>
+      <div class="field"><label for="u">Username</label><input id="u" autocomplete="username" required maxlength="64"></div>
+      <div class="field"><label for="p">Password</label><input id="p" type="password" autocomplete="current-password" required maxlength="256"></div>
+      <button class="btn primary" type="submit">Sign in</button>
+      <p class="err" id="err" role="alert"></p>
+    </form>
+  </div>
+  <script src="/static/build/login.js"></script>
+</body>
+</html>
