@@ -75,6 +75,25 @@ const nextPosition = (section: string) =>
   one<{ n: number }>("SELECT COALESCE(MAX(position), 0) + 1 AS n FROM pages WHERE section=?", section)!.n;
 
 /** Content-Disposition that works for any file name, including non-English ones. */
+/** A tunnel on this PC (Tailscale Funnel, cloudflared) relays requests from loopback. Only then are its forwarded headers trusted. */
+function viaLocalProxy(req: Request): boolean {
+  const a = req.socket.remoteAddress ?? "";
+  return (a === "127.0.0.1" || a === "::1" || a === "::ffff:127.0.0.1") && req.get("x-forwarded-for") !== undefined;
+}
+
+/** True when the browser reached us over HTTPS (through a tunnel), so cookies can be Secure-only. */
+const isHttps = (req: Request): boolean =>
+  COOKIE_SECURE || (viaLocalProxy(req) && req.get("x-forwarded-proto") === "https");
+
+/** The visitor's IP, for login throttling. */
+function clientIp(req: Request): string {
+  if (viaLocalProxy(req)) {
+    const forwarded = req.get("cf-connecting-ip") || req.get("x-forwarded-for")!.split(",")[0]!.trim();
+    if (forwarded) return forwarded;
+  }
+  return req.socket.remoteAddress || "?";
+}
+
 function disposition(type: "inline" | "attachment", filename: string): string {
   const ascii = filename.replace(/[^\x20-\x7e]|["\\]/g, "_");
   return `${type}; filename="${ascii}"; filename*=UTF-8''${encodeURIComponent(filename)}`;
@@ -108,7 +127,7 @@ export function createApp(): express.Express {
     res.setHeader("Referrer-Policy", "no-referrer");
     res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
     res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
-    if (COOKIE_SECURE) res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+    if (isHttps(req)) res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
     if (req.path.startsWith("/api/") || req.path.startsWith("/files/")) res.setHeader("Cache-Control", "private, no-store");
     next();
   });
@@ -117,7 +136,7 @@ export function createApp(): express.Express {
   // ---------------------------------------------------------------- auth
   app.post("/api/login", async (req, res) => {
     const body = parse(LoginIn, req.body);
-    const ip = req.get("cf-connecting-ip") || req.socket.remoteAddress || "?";
+    const ip = clientIp(req);
     const key = `${body.username.toLowerCase()}|${ip}`;
     const ipKey = `*|${ip}`;
     if (tooManyAttempts(key) || tooManyAttempts(ipKey, 20)) throw new HttpError(429, "Too many attempts. Wait 15 minutes.");
@@ -130,7 +149,7 @@ export function createApp(): express.Express {
     clearFailures(key);
     const { token, csrf } = createSession(user.id);
     res.cookie(COOKIE, token, {
-      maxAge: SESSION_HOURS * 3600 * 1000, httpOnly: true, secure: COOKIE_SECURE, sameSite: "strict", path: "/",
+      maxAge: SESSION_HOURS * 3600 * 1000, httpOnly: true, secure: isHttps(req), sameSite: "strict", path: "/",
     });
     res.json({ username: user.username, role: user.role, csrf });
   });

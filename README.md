@@ -29,6 +29,17 @@ The first time, it installs the packages, creates `.env`, and asks you in the bl
 
 **Privacy note:** the AI runs on Hugging Face's servers, so the passages retrieved for each question (and the text of pages, when they are indexed) are sent to Hugging Face. Your files and database stay on your PC.
 
+**Open it from other devices at home (phone, tablet, another PC):**
+
+1. In `.env`, set `HOST=0.0.0.0` (keep `COOKIE_SECURE=false`) and restart `start.bat`. The window prints the address to use, e.g. `http://192.168.1.105:8000`.
+2. In Windows, set your home Wi-Fi to **Private** (Settings → Network & internet → Wi-Fi → your network → Private network).
+3. Allow the port, from PowerShell run as administrator:
+   ```powershell
+   New-NetFirewallRule -DisplayName "StudyVault (port 8000, home network)" -Direction Inbound -Protocol TCP -LocalPort 8000 -Profile Private -RemoteAddress LocalSubnet -Action Allow
+   ```
+
+The rule only applies on Private networks, so on public Wi-Fi the site stays hidden. Traffic at home is plain HTTP, so only do this on a network you trust. If the address changes, reserve a fixed IP for the PC in your router's settings.
+
 ## 2. Test it (one click)
 
 Double-click **`test.bat`**. It checks the types in every TypeScript file, then runs the automated tests in [tests/](tests/).
@@ -123,7 +134,7 @@ Now people must pass an emailed one-time code before they even see the StudyVaul
 - Uploads go through an **extension allowlist** and a size limit. Files are stored under random names. Each file is served with `nosniff` and its own locked-down sandbox CSP, so a malicious HTML or SVG can't run.
 - Viewers are checked on the server for every page, file, search and AI request, not just hidden in the interface.
 - The AI system prompt treats your documents as data, not instructions, which limits prompt injection from uploaded files.
-- The server only listens on `127.0.0.1`, so other devices on your Wi-Fi can't reach it. The Hugging Face token stays on the server and is never sent to the browser.
+- By default the server only listens on `127.0.0.1`, so other devices on your Wi-Fi can't reach it. Setting `HOST=0.0.0.0` (see "Open it from other devices at home") lets them reach it over plain HTTP. The Hugging Face token stays on the server and is never sent to the browser.
 
 **Your job:** use a long, unique password. Keep `.env` and `data/` private. Run `npm update` now and then for security fixes. Keep backups.
 
