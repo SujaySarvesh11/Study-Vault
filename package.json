@@ -10,6 +10,7 @@
   },
   "scripts": {
     "build": "node scripts/build-client.ts",
+    "build:pages": "node scripts/build-pages.ts",
     "start": "node --env-file-if-exists=.env src/server/main.ts",
     "dev": "node scripts/dev.ts",
     "manage": "node --env-file-if-exists=.env src/server/manage.ts",

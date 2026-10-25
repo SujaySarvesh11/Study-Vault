@@ -1,0 +1,17 @@
+/* Extras for the static GitHub Pages build; everything else comes from static/style.css. */
+.prose h2, .prose h3, .prose h4 { scroll-margin-top: 72px; }
+.card-link { color: var(--ink); text-decoration: none; }
+.card-link:hover { color: var(--accent); }
+
+.search-pop {
+  position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 50;
+  background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .18); padding: 6px; max-height: 70vh; overflow-y: auto;
+}
+.search-pop a { display: block; padding: 8px 10px; border-radius: 6px; text-decoration: none; color: var(--ink); }
+.search-pop a:hover, .search-pop a:focus { background: var(--accent-soft); outline: none; }
+.search-pop a b { display: block; font-weight: 600; font-size: 14.5px; }
+.search-pop a small { color: var(--ink-3); font-size: 12px; }
+.search-pop .more { color: var(--accent); font-size: 13px; }
+.search-pop .none { padding: 10px; color: var(--ink-3); font-size: 14px; }
+.search-hit small.crumbs { margin-left: 6px; }

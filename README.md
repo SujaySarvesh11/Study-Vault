@@ -88,6 +88,16 @@ npm run manage import-tutorials --shared   # also visible to viewers
 
 Run it again after editing a lesson file: it updates the existing pages instead of making copies. To add your own lesson, create `tutorials/<Section>/NN-name.md` starting with a `# Title` line.
 
+## Read the tutorials online (GitHub Pages)
+
+The built-in courses are also published as a free, read-only website: **<https://sujaysarvesh11.github.io/Study-Vault/>**
+
+It has the same look as the app (sidebar, "On this page", Previous/Next, code highlighting, light/dark theme, search) but none of the private parts: no sign-in, uploads, editing or AI assistant, because GitHub Pages can only host plain files. Your own notes in `data/` are never published.
+
+- **Updating it:** edit or add a lesson in `tutorials/` and push to `main`. The workflow in [.github/workflows/pages.yml](.github/workflows/pages.yml) rebuilds and republishes the site in about a minute.
+- **Preview it locally:** `npm run build:pages`, then serve the folder, for example `npx serve _site`, and open the address it prints.
+- **How it's built:** [scripts/build-pages.ts](scripts/build-pages.ts) turns each lesson into an HTML page at build time; [scripts/pages/](scripts/pages/) holds the small script and styles for search, theme and the mobile menu.
+
 ## 4. Reach it from anywhere (Cloudflare Tunnel, free)
 
 The tunnel makes an outgoing, encrypted connection from your PC to Cloudflare. You don't open any ports on your router, and your home IP stays hidden. **First set `COOKIE_SECURE=true` in `.env`.**
